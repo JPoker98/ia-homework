@@ -39,14 +39,14 @@ public class WallGenerator : MonoBehaviour
                         {
                             Vector3 zigzagPosition = new Vector3(j * brickDimensions.x - brickDimensions.x / 2, 0.5f + i * brickDimensions.y, 0);
 
-                            Instantiate(brick, zigzagPosition, Quaternion.identity, transform);
+                            Instantiate(brick, (transform.position + zigzagPosition), Quaternion.identity, transform);
                             
                         }
                         else
                         {
                             Vector3 position = new Vector3(j * brickDimensions.x, 0.5f + i * brickDimensions.y, 0);
 
-                            Instantiate(brick, position, Quaternion.identity, transform);
+                            Instantiate(brick, transform.position + position, Quaternion.identity, transform);
                         }
 
 
@@ -55,7 +55,7 @@ public class WallGenerator : MonoBehaviour
                     {
                         Vector3 position = new Vector3(j * brickDimensions.x, 0.5f + i * brickDimensions.y, 0);
 
-                        Instantiate(brick, position, Quaternion.identity, transform);
+                        Instantiate(brick, transform.position + position, Quaternion.identity, transform);
                     }
 
 

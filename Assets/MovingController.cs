@@ -93,7 +93,6 @@ public class MovingController : MonoBehaviour {
 
     public void Patrol(Vector3[] positions)
     {
-        Debug.Log(positions.Length + ":"+positions[0]+""+positions[1]);
         fixedTransform.position = Vector3.MoveTowards(transform.position, positions[nextPointToCheck], charSpeed * Time.deltaTime);
 
         //Checks if it has arrived and change objective if so
