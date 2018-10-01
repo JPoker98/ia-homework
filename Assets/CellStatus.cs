@@ -43,7 +43,7 @@ public class CellStatus : MonoBehaviour {
         {
             attacked = true;
             queen.enabled = true;
-            queen.color = bm.queensColor[bm.currentQueen];
+            queen.color = bm.queensColor[bm.currentQueen%bm.queensColor.Length];
             bm.AttackTheRest(row, column);
         }
     }

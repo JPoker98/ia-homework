@@ -1,49 +1,89 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class BoardManager : MonoBehaviour {
+public class BoardManager : MonoBehaviour
+{
 
     public int rowsColumns;
     public GameObject grid;
-
+    public GameObject cell;
     public GameObject[] cells;
     public int currentQueen;
     public Color[] queensColor = new Color[8];
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
+        InitializeBoard(rowsColumns);
         int totalNumber = rowsColumns * rowsColumns;
         cells = new GameObject[totalNumber];
 
         int row = 0;
         int column = 0;
-        for (int i = 0; i < cells.Length; i++)
+
+        if (rowsColumns % 2 == 0)
         {
-            
-            cells[i] = grid.transform.GetChild(i).gameObject;
-            if (column % 8 == 0 && column >1) row++;
-            cells[i].GetComponent<CellStatus>().row = row;
-            cells[i].GetComponent<CellStatus>().column= column%8;
-
-            column++;
-            if ((i+row)%2 == 1)
+            for (int i = 0; i < cells.Length; i++)
             {
-                cells[i].GetComponent<CellStatus>().ChangeColor(Color.white);
 
+                cells[i] = grid.transform.GetChild(i).gameObject;
+                if (column % rowsColumns == 0 && column > 1) row++;
+                cells[i].GetComponent<CellStatus>().row = row;
+                cells[i].GetComponent<CellStatus>().column = column % rowsColumns;
+
+                column++;
+                if ((i + row) % 2 == 1)
+                {
+                    cells[i].GetComponent<CellStatus>().ChangeColor(Color.white);
+
+                }
+                else
+                {
+                    cells[i].GetComponent<CellStatus>().ChangeColor(Color.black);
+
+                }
             }
-            else
+        }
+        else
+        {
+            for (int i = 0; i < cells.Length; i++)
             {
-                cells[i].GetComponent<CellStatus>().ChangeColor(Color.black);
 
+                cells[i] = grid.transform.GetChild(i).gameObject;
+                if (column % rowsColumns == 0 && column > 1) row++;
+                cells[i].GetComponent<CellStatus>().row = row;
+                cells[i].GetComponent<CellStatus>().column = column % rowsColumns;
+
+                column++;
+                if ((i) % 2 == 1)
+                {
+                    cells[i].GetComponent<CellStatus>().ChangeColor(Color.white);
+
+                }
+                else
+                {
+                    cells[i].GetComponent<CellStatus>().ChangeColor(Color.black);
+
+                }
             }
-            
         }
 
     }
+    public void InitializeBoard(int rows)
+    {
+        grid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(1024 / rows, 1024 / rows);
 
+
+
+        for (int i = 0; i < rows * rows; i++)
+        {
+            Instantiate(cell, Vector3.zero, Quaternion.identity, grid.transform);
+        }
+    }
     public void AttackTheRest(int row, int column)
     {
-        foreach(GameObject cell in cells)
+        foreach (GameObject cell in cells)
         {
             int cellRow = cell.GetComponent<CellStatus>().row;
             int cellColumn = cell.GetComponent<CellStatus>().column;
@@ -51,17 +91,17 @@ public class BoardManager : MonoBehaviour {
             Vector2 queenCoordinates = new Vector2(row, column);
 
             if (!cell.GetComponent<CellStatus>().attacked)
-                {
-                if (cellRow == row || cellColumn == column || CheckDiagonals(cellCoordinates,queenCoordinates))
+            {
+                if (cellRow == row || cellColumn == column || CheckDiagonals(cellCoordinates, queenCoordinates))
                 {
                     cell.GetComponent<CellStatus>().attacked = true;
-                    cell.GetComponent<CellStatus>().IsAttacked(queensColor[currentQueen]);
+                    cell.GetComponent<CellStatus>().IsAttacked(queensColor[currentQueen % queensColor.Length]);
                 }
                 else
                 {
 
 
-                    
+
                     //diagonal arriba derecha
                     //diagonal arriba izquierda
                     //diagonal abajo derecha
@@ -87,24 +127,25 @@ public class BoardManager : MonoBehaviour {
         }
         return false;*/
     }
-	// Update is called once per frame
+    // Update is called once per frame
     public int SearchNextEmpty()
     {
         int cellsChecked = 0;
         int emptyCell = Random.Range(0, cells.Length);
-        while(cellsChecked < 65)
+        while (cellsChecked < (rowsColumns * rowsColumns + 1))
         {
             cellsChecked++;
-            if (!cells[(emptyCell + cellsChecked) % 64].GetComponent<CellStatus>().attacked)
+            if (!cells[(emptyCell + cellsChecked) % (rowsColumns * rowsColumns)].GetComponent<CellStatus>().attacked)
             {
-                return (emptyCell+cellsChecked)%64;
+                return (emptyCell + cellsChecked) % (rowsColumns * rowsColumns);
             }
 
         }
 
         return 0;
     }
-	void Update () {
+    void Update()
+    {
 
     }
 }

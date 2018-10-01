@@ -13,12 +13,12 @@ public class FillIA : MonoBehaviour {
     int queensPlaced = 0;
 	// Use this for initialization
 	void Start () {
-        if (initialCell == 0 || initialCell >64)
+        if (initialCell == 0 || initialCell > bm.rowsColumns * bm.rowsColumns)
         {
-            initialCell = Random.Range(1, 65);
+            initialCell = Random.Range(1, (bm.rowsColumns*bm.rowsColumns + 1));
         }
-        int row = (initialCell - 1)/8 + 1;
-        int column =initialCell%8 + 1;
+        int row = (initialCell - 1)/bm.rowsColumns + 1;
+        int column =initialCell%bm.rowsColumns + 1;
 
         initialQueenCoord = new Vector2(row, column);
 
@@ -31,7 +31,7 @@ public class FillIA : MonoBehaviour {
         {
             placeQueen = false;
 
-            if (queensPlaced == 8)
+            if (queensPlaced == bm.rowsColumns)
             {
                 Debug.Log("No More Room for Queens, total number = " + queensPlaced);
                 return;
